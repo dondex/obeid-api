@@ -95,6 +95,48 @@ class UserController extends Controller
         ]);
     }
 
+    public function update(Request $request)
+    {
+        // Validate the incoming request data
+        $request->validate([
+            'full_name' => 'sometimes|required|string|max:255',
+            'resident_number' => 'sometimes|required|string|max:255',
+            'phone_number' => 'sometimes|required|string|max:15',
+            'birthday' => 'sometimes|required|date|before:today',
+            'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . auth()->id(),
+            'insurance' => 'sometimes|required|string', // Validate as string
+        ]);
+
+        // Get the authenticated user
+        $user = auth()->user();
+
+        // Update the user's profile with the validated data
+        if ($request->has('full_name')) {
+            $user->full_name = $request->input('full_name');
+        }
+        if ($request->has('resident_number')) {
+            $user->resident_number = $request->input('resident_number');
+        }
+        if ($request->has('phone_number')) {
+            $user->phone_number = $request->input('phone_number');
+        }
+        if ($request->has('birthday')) {
+            $user->birthday = $request->input('birthday');
+        }
+        if ($request->has('email')) {
+            $user->email = $request->input('email');
+        }
+        if ($request->has('insurance')) {
+            $user->insurance = $request->input('insurance') === 'true'; // Convert string to boolean
+        }
+
+        // Save the updated user
+        $user->save();
+
+        // Return a success response
+        return response()->json(['message' => 'Profile updated successfully!', 'user' => $user], 200);
+    }
+
     public function logout()
     {
         auth()->user()->tokens()->delete();

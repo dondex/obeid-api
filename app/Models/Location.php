@@ -3,16 +3,16 @@
 namespace App\Models;
 
 use App\Models\Department;
-use App\Models\Location;
+use App\Models\Doctor;
 use Illuminate\Database\Eloquent\Model;
 
-class Doctor extends Model
+class Location extends Model
 {
     protected $fillable = [
         'name',
+        'image',
         'department_id',
-        'doctor_image',
-        'available_time_slot'
+        'doctor_id'
     ];
 
     public function department()
@@ -20,9 +20,8 @@ class Doctor extends Model
         return $this->belongsTo(Department::class);
     }
 
-    public function locations()
+    public function doctor()
     {
-        return $this->hasMany(Location::class);
+        return $this->belongsTo(Doctor::class);
     }
-   
 }

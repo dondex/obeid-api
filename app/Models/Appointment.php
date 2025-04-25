@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Department;
 use App\Models\Doctor;
+use App\Models\Location;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,7 +16,8 @@ class Appointment extends Model
         'user_id', 
         'subject',
         'prescription',
-        'time_slot', 
+        'time_slot',
+        'location_id', 
     ];
 
     public function department()
@@ -31,5 +33,10 @@ class Appointment extends Model
     public function user() 
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function location() 
+    {
+        return $this->belongsTo(Location::class);
     }
 }
